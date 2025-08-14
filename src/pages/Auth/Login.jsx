@@ -32,7 +32,7 @@ const Login = () => {
       setError(msg);
       toast.error(msg);
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   };
 
