@@ -1,0 +1,141 @@
+/*--------------------------------------------------------------
+# registerFormSection
+--------------------------------------------------------------*/
+.register-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, #bfe8fd, #fcd6b1);
+  padding: 2rem;
+}
+
+.register-grid {
+  display: flex;
+  max-width: 900px;
+  width: 100%;
+  background-color: #0f0f0f;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.register-image {
+  flex: 1 1 40%;
+  background-color: #fff5e9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.register-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.register-form-container {
+  flex: 1 1 60%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.register-title {
+  font-size: 2rem;
+  color: #f58634;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.register-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+.register-form-container input {
+  width: 100%;
+  padding: 0.85rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.register-form-container input:focus {
+  border-color: #f58634;
+  box-shadow: 0 0 6px #f58634aa;
+  outline: none;
+}
+
+.register-policy {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #faf9f8;
+}
+
+.register-policy a {
+  color: #f58634;
+  text-decoration: none;
+}
+
+.register-policy a:hover {
+  text-decoration: underline;
+}
+
+.register-button {
+  width: 100%;
+  padding: 0.9rem;
+  background-color: #f58634;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.register-button:hover {
+  background-color: #e26d1b;
+}
+
+.register-links {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: #faf9f8;
+}
+
+.register-links a {
+  color: #f58634;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.register-links a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .register-grid {
+    flex-direction: column;
+  }
+
+  .register-image {
+    padding: 1rem 0;
+  }
+
+  .register-form-container {
+    padding: 1.5rem;
+  }
+
+  .register-row {
+    flex-direction: column;
+  }
+}
