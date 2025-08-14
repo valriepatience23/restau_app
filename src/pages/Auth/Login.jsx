@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
 import { Link, useNavigate } from 'react-router-dom';
-import { login as apiLogin } from '../../services/api';
+import { login } from '../../services/api';
+import { toast } from 'react-toastify';
 
 
 const Login = () => {
@@ -23,15 +24,13 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const res = await apiLogin(email, password);
-      // success: token/user saved by service; redirect selon role
-      if (res?.user?.role === 'admin') {
-        navigate('/'); // TODO: remplacer par /admin/dashboard si existant
-      } else {
-        navigate('/');
-      }
+      const res = await login(email, password);
+      toast.success('Connexion réussie !');
+      navigate('/admin/dashboard');
     } catch (err) {
-      setError(err?.message || 'Une erreur est survenue');
+      const msg = err?.message || 'Une erreur est survenue';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -39,6 +38,13 @@ const Login = () => {
 
   return (
     <section className="auth-section">
+      {loading && (
+        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ background: 'rgba(0,0,0,.25)', zIndex: 2000 }}>
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Chargement...</span>
+          </div>
+        </div>
+      )}
       <div className="auth-grid">
         <div className="auth-image" data-aos="fade-right">
           <img src="assets/img/log.jpg" alt="Connexion" />

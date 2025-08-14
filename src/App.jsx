@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Home from './pages/PublicPage/Home';
 import About from './pages/PublicPage/About';
@@ -24,7 +26,8 @@ import Login from './pages/Auth/Login';
 import ResetPassword from './pages/Auth/Resetpassword';
 
 
-// import AdminRoutes from './routes/AdminRoute';
+import AdminRoutes from './routes/AdminRoute';
+import RequireAuth from './components/RequireAuth';
 
 
 
@@ -55,11 +58,25 @@ const App = () => {
           <Route path="reset-password" element={<ResetPassword />} />
         </Route>
 
-        {/* <Route>
-      <AdminRoutes />
-      {/* Tu peux ajouter ici les routes publiques aussi */}
-    
+        <Route path="/admin/*" element={
+          <RequireAuth>
+            <AdminRoutes />
+          </RequireAuth>
+        } />
       </Routes>
+      
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </BrowserRouter>
   );
 };

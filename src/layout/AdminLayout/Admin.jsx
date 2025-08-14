@@ -2,7 +2,7 @@
 import Sidebar from '../../components/Admin/Sidebar';
 import Navbar from '../../components/Admin/Navbar';
 import { Outlet } from 'react-router-dom';
-import '../assets/Admin/css/dash.css';
+import '../../assets/Admin/css/dash.css';
 
 
 const Admin = () => {

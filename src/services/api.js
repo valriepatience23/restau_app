@@ -42,9 +42,13 @@ export async function register({ name, telephone, email, password }) {
   return data;
 }
 
-export function logout() {
-  localStorage.removeItem('token');
+export async function logout() {
+  const data = await request('/auth/logout', { method: 'POST', auth: true });
+  
+  if(data.success){
+    localStorage.removeItem('token');
   localStorage.removeItem('user');
+  }
 }
 
 export async function forgotPassword(email) {
@@ -61,4 +65,62 @@ export async function resetPassword(email, code, newPassword) {
 export function getCurrentUser() {
   const raw = localStorage.getItem('user');
   try { return raw ? JSON.parse(raw) : null; } catch { return null; }
+}
+
+export async function getDashboardSummary() {
+  return await request('/dashboard/summary', { auth: true });
+}
+
+// Admin - Users CRUD
+export async function listUsers() {
+  return await request('/users', { auth: true });
+}
+
+export async function getUserById(id) {
+  return await request(`/users/${id}`, { auth: true });
+}
+
+export async function createUserAdmin(payload) {
+  // Expected payload: { name, email, telephone, role, password }
+  return await request('/users', { method: 'POST', body: payload, auth: true });
+}
+
+export async function updateUserAdmin(id, payload) {
+  return await request(`/users/${id}`, { method: 'PATCH', body: payload, auth: true });
+}
+
+export async function deleteUserAdmin(id) {
+  return await request(`/users/${id}`, { method: 'DELETE', auth: true });
+}
+
+// Profile (self)
+export async function fetchMe() {
+  return await request('/users/me', { auth: true });
+}
+
+export async function updateMe(payload) {
+  // Allowed: { name, telephone }
+  return await request('/users/me', { method: 'PATCH', body: payload, auth: true });
+}
+
+// Admin - Categories CRUD
+export async function listCategories() {
+  return await request('/categories', { auth: true });
+}
+
+export async function getCategoryById(id) {
+  return await request(`/categories/${id}`, { auth: true });
+}
+
+export async function createCategoryAdmin(payload) {
+  // Expected payload: { nom, description }
+  return await request('/categories', { method: 'POST', body: payload, auth: true });
+}
+
+export async function updateCategoryAdmin(id, payload) {
+  return await request(`/categories/${id}`, { method: 'PATCH', body: payload, auth: true });
+}
+
+export async function deleteCategoryAdmin(id) {
+  return await request(`/categories/${id}`, { method: 'DELETE', auth: true });
 }

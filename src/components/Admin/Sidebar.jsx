@@ -1,83 +1,113 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import logo from '../assets/img/logo-ct-dark.png'; // Assure-toi que le chemin est correct
-import './Sidenav.css'; // Pour les styles personnalisés si besoin
+import { NavLink, useNavigate } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  Users, 
+  Tags, 
+  ChefHat, 
+  ShoppingCart, 
+  BarChart3,
+  Settings,
+  User,
+  LogOut
+} from 'lucide-react';
+import { logout, getCurrentUser } from '../../services/api';
+import { toast } from 'react-toastify';
+import logo from '../../assets/Admin/img/logo-ct-dark.png';
 
 const navItems = [
-  { label: 'Dashboard', icon: 'dashboard', path: '/dashboard', active: true },
-  { label: 'Tables', icon: 'table_view', path: '/tables' },
-  { label: 'Billing', icon: 'receipt_long', path: '/billing' },
-  { label: 'Virtual Reality', icon: 'view_in_ar', path: '/virtual-reality' },
-  { label: 'RTL', icon: 'format_textdirection_r_to_l', path: '/rtl' },
-  { label: 'Notifications', icon: 'notifications', path: '/notifications' },
+  { label: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
+  { label: 'Utilisateurs', icon: Users, path: '/admin/dashboard/users' },
+  { label: 'Catégories', icon: Tags, path: '/admin/dashboard/categories' },
+  { label: 'Plats', icon: ChefHat, path: '/admin/dashboard/plats' },
+  { label: 'Commandes', icon: ShoppingCart, path: '/admin/dashboard/commandes' },
+  { label: 'Statistiques', icon: BarChart3, path: '/admin/dashboard/stats' },
 ];
 
 const accountItems = [
-  { label: 'Profile', icon: 'person', path: '/profile' },
-  { label: 'Sign In', icon: 'login', path: '/sign-in' },
-  { label: 'Sign Up', icon: 'assignment', path: '/sign-up' },
+  { label: 'Paramètres', icon: Settings, path: '/admin/dashboard/settings' },
+  { label: 'Mon Profil', icon: User, path: '/admin/dashboard/profile' },
 ];
 
 const Sidenav = () => {
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
+
+  const handleLogout = () => {
+    logout();
+    toast.success('Déconnexion réussie');
+    navigate('/Login');
+  };
+
   return (
     <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2 bg-white my-2" id="sidenav-main">
       <div className="sidenav-header">
         <i className="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-xl-none" id="iconSidenav" />
-        <a className="navbar-brand px-4 py-3 m-0" href="https://demos.creative-tim.com/material-dashboard/pages/dashboard" target="_blank" rel="noopener noreferrer">
+        <div className="navbar-brand px-4 py-3 m-0">
           <img src={logo} className="navbar-brand-img" width="26" height="26" alt="main_logo" />
-          <span className="ms-1 text-sm text-dark">Creative Tim</span>
-        </a>
+          <span className="ms-1 text-sm text-dark">Restaurant Admin</span>
+        </div>
       </div>
 
       <hr className="horizontal dark mt-0 mb-2" />
 
       <div className="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
         <ul className="navbar-nav">
-          {navItems.map(({ label, icon, path, active }) => (
+          {navItems.map(({ label, icon: Icon, path }) => (
             <li className="nav-item" key={label}>
               <NavLink
                 to={path}
-                className={`nav-link ${active ? 'active bg-gradient-dark text-white' : 'text-dark'}`}
+                className={({ isActive }) => 
+                  `nav-link ${isActive ? 'active bg-gradient-dark text-white' : 'text-dark'}`
+                }
               >
-                <i className="material-symbols-rounded opacity-5">{icon}</i>
-                <span className="nav-link-text ms-1">{label}</span>
+                <Icon size={20} className="opacity-75 me-2" />
+                <span className="nav-link-text">{label}</span>
               </NavLink>
             </li>
           ))}
 
           <li className="nav-item mt-3">
-            <h6 className="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Account pages</h6>
+            <h6 className="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Compte</h6>
           </li>
 
-          {accountItems.map(({ label, icon, path }) => (
+          {accountItems.map(({ label, icon: Icon, path }) => (
             <li className="nav-item" key={label}>
-              <NavLink to={path} className="nav-link text-dark">
-                <i className="material-symbols-rounded opacity-5">{icon}</i>
-                <span className="nav-link-text ms-1">{label}</span>
+              <NavLink 
+                to={path} 
+                className={({ isActive }) => 
+                  `nav-link ${isActive ? 'active bg-gradient-dark text-white' : 'text-dark'}`
+                }
+              >
+                <Icon size={20} className="opacity-75 me-2" />
+                <span className="nav-link-text">{label}</span>
               </NavLink>
             </li>
           ))}
+
+        
         </ul>
       </div>
 
       <div className="sidenav-footer position-absolute w-100 bottom-0">
         <div className="mx-3">
-          <a
-            className="btn btn-outline-dark mt-4 w-100"
-            href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard?ref=sidebarfree"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-          <a
-            className="btn bg-gradient-dark w-100"
-            href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Upgrade to pro
-          </a>
+          {currentUser && (
+            <div className="card card-plain shadow-none" style={{ background: '#f8f9fa' }}>
+              <div className="card-body p-3">
+                <div className="d-flex align-items-center">
+                  <div className="avatar avatar-sm me-2">
+                    <div className="avatar-initial rounded-circle bg-gradient-dark text-white d-flex align-items-center justify-content-center">
+                      {currentUser.name?.charAt(0).toUpperCase() || 'A'}
+                    </div>
+                  </div>
+                  <div>
+                    <h6 className="mb-0 text-sm">{currentUser.name}</h6>
+                    <p className="text-xs text-secondary mb-0">{currentUser.role}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </aside>

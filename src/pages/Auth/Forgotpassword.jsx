@@ -3,6 +3,7 @@ import 'aos/dist/aos.css';
 import AOS from 'aos';
 import { Link, useNavigate } from 'react-router-dom';
 import { forgotPassword as apiForgotPassword } from '../../services/api';
+import { toast } from 'react-toastify';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -24,9 +25,12 @@ const ForgotPassword = () => {
     try {
       const response = await apiForgotPassword(email);
       setSuccess('Un code de vérification a été envoyé à votre adresse e-mail');
+      toast.success('Code envoyé par email');
       navigate('/reset-password');
     } catch (err) {
-      setError(err?.message || 'Une erreur est survenue');
+      const msg = err?.message || 'Une erreur est survenue';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -34,6 +38,13 @@ const ForgotPassword = () => {
 
   return (
     <section className="auth-section">
+      {loading && (
+        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ background: 'rgba(0,0,0,.25)', zIndex: 2000 }}>
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Chargement...</span>
+          </div>
+        </div>
+      )}
       <div className="auth-grid">
         <div className="auth-image" data-aos="fade-right">
           <img src="assets/img/log.jpg" alt="Connexion" />

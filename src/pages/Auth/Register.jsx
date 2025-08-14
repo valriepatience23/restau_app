@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register as apiRegister } from '../../services/api';
- ;
+import { toast } from 'react-toastify';
 
 
 const Register = () => {
@@ -29,6 +29,7 @@ const Register = () => {
     setSuccess('');
     if (formData.password !== formData.confirmPassword) {
       setError('Les mots de passe ne correspondent pas');
+      toast.error('Les mots de passe ne correspondent pas');
       return;
     }
     setLoading(true);
@@ -41,10 +42,13 @@ const Register = () => {
       };
       const res = await apiRegister(payload);
       setSuccess('Inscription réussie');
+      toast.success('Inscription réussie');
       // Token/user déjà stockés; on peut rediriger
-      navigate('/dashboard');
+      navigate('/admin/dashboard');
     } catch (err) {
-      setError(err?.message || 'Une erreur est survenue');
+      const msg = err?.message || 'Une erreur est survenue';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -52,6 +56,13 @@ const Register = () => {
 
   return (
     <section className="register-section">
+      {loading && (
+        <div className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ background: 'rgba(0,0,0,.25)', zIndex: 2000 }}>
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Chargement...</span>
+          </div>
+        </div>
+      )}
       <div className="register-grid">
         {/* 📝 Formulaire à droite */}
         <div className="register-form-container" data-aos="fade-right">

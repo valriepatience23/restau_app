@@ -1,24 +1,26 @@
-// import React from 'react';
-// import { Routes, Route, Navigate } from 'react-router-dom';
-// import Dashboard from '../pages/Admin/Dashboard';
-// import Users from '../pages/admin/Users';
-// import StatsCards from './components/Admin/StatsCards';
-// import ChartCards from './components/Admin/ChartCards';
-// // import Settings from '../pages/admin/Settings';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Dashboard from '../pages/Admin/Dashboard';
+import Users from '../pages/Admin/Users';
+import AdminLayout from '../layout/AdminLayout/Admin';
+import Profile from '../pages/Admin/Profile';
+import Categorie from '../pages/Admin/Categorie';
+import Plats from '../pages/Admin/Plats';
+import Commandes from '../pages/Admin/Commande';
 
-// const AdminRoutes = () => {
-//   return (
-//     <Routes>
+const AdminRoutes = () => {
+  return (
+    <Routes>
+        <Route path="/dashboard" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="users" element={<Users />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="categories" element={<Categorie />} />
+            <Route path="plats" element={<Plats />} />
+            <Route path="commandes" element={<Commandes />} />
+        </Route>
+    </Routes>
+  );
+};
 
-//         <Route index element={<Navigate to="dashboard" />} />
-//         <Route path="/dashboard" element={<Dashboard />} />
-//         <Route path="users" element={<Users />} />
-//         <Route path="/statscards" element={<StatsCards />} />
-//         <Route path="chartcards" element={<ChartCards />} />
-//         {/* <Route path="settings" element={<Settings />} /> */}
-      
-//     </Routes>
-//   );
-// };
-
-// export default AdminRoutes;
+export default AdminRoutes;
