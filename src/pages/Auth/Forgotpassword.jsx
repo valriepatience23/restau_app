@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { forgotPassword as apiForgotPassword } from '../../services/api';
 
-
-const Login = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     AOS.init({ duration: 800 });
   }, []);
 
-  const handleLogin = (e) => {
+  const handleForgotPassword = async (e) => {
     e.preventDefault();
-    console.log('Conn:', { email });
+    setError('');
+    setSuccess('');
+    setLoading(true);
+    
+    try {
+      const response = await apiForgotPassword(email);
+      setSuccess('Un code de vérification a été envoyé à votre adresse e-mail');
+      navigate('/reset-password');
+    } catch (err) {
+      setError(err?.message || 'Une erreur est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,7 +41,7 @@ const Login = () => {
 
         <div className="auth-form-container" data-aos="fade-left">
           <h2>Reinitiiser votre Mot de passe</h2>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleForgotPassword}>
             <input
               type="email"
               placeholder="Adresse e-mail"
@@ -54,4 +68,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

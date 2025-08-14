@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { register as apiRegister } from '../../services/api';
  ;
 
 
@@ -11,6 +12,10 @@ const Register = () => {
     password: '',
     confirmPassword: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   // const [policyAccepted, setPolicyAccepted] = useState(false);
 
@@ -18,9 +23,31 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log('Inscription:', formData);
+    setError('');
+    setSuccess('');
+    if (formData.password !== formData.confirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      return;
+    }
+    setLoading(true);
+    try {
+      const payload = {
+        name: formData.name,
+        telephone: formData.phone,
+        email: formData.email,
+        password: formData.password,
+      };
+      const res = await apiRegister(payload);
+      setSuccess('Inscription réussie');
+      // Token/user déjà stockés; on peut rediriger
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err?.message || 'Une erreur est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -30,6 +57,8 @@ const Register = () => {
         <div className="register-form-container" data-aos="fade-right">
           <h2 className="register-title">Inscrivez-vous ici</h2>
           <form onSubmit={handleRegister}>
+            {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
+            {success && <div style={{ color: 'green', marginBottom: 12 }}>{success}</div>}
             <div className="register-row">
               <input
                 type="text"
@@ -88,12 +117,12 @@ const Register = () => {
               disabled={!policyAccepted}
             </label> */}
 
-            <button type="submit"  className="register-button">
-              S’inscrire
+            <button type="submit" className="register-button" disabled={loading}>
+              {loading ? 'Inscription...' : 'S’inscrire'}
             </button>
 
             <div className="register-links">
-              <span>Vous avez déjà un compte ? <Link to="/login">Se connecter</Link></span>
+              <span>Vous avez déjà un compte ? <Link to="/Login">Se connecter</Link></span>
             </div>
           </form>
         </div>

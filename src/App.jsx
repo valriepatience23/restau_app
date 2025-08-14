@@ -21,6 +21,7 @@ import PaieForm from './pages/PublicPage/PaieForm';
 
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
+import ResetPassword from './pages/Auth/Resetpassword';
 
 
 // import AdminRoutes from './routes/AdminRoute';
@@ -50,8 +51,8 @@ const App = () => {
 
           <Route path="Register" element={<Register />} />
           <Route path="Login" element={<Login />} />
-          <Route path="Forgotpassword" element={<Forgotpassword />} />
-          
+          <Route path="forgot-password" element={<Forgotpassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
         </Route>
 
         {/* <Route>

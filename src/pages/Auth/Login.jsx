@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import 'aos/dist/aos.css';
 import AOS from 'aos';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { login as apiLogin } from '../../services/api';
 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
   
 
 
@@ -14,9 +18,23 @@ const Login = () => {
     AOS.init({ duration: 800 });
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Connexion:', { email, password });
+    setError('');
+    setLoading(true);
+    try {
+      const res = await apiLogin(email, password);
+      // success: token/user saved by service; redirect selon role
+      if (res?.user?.role === 'admin') {
+        navigate('/'); // TODO: remplacer par /admin/dashboard si existant
+      } else {
+        navigate('/');
+      }
+    } catch (err) {
+      setError(err?.message || 'Une erreur est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,6 +47,9 @@ const Login = () => {
         <div className="auth-form-container" data-aos="fade-left">
           <h2>Identifiez-Vous</h2>
           <form onSubmit={handleLogin}>
+            {error && (
+              <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>
+            )}
             <input
               type="email"
               placeholder="Adresse e-mail"
@@ -47,13 +68,13 @@ const Login = () => {
               <input className="auth-form-check-input" type="checkbox" id="rememberMe"/>
               <label className="auth-form-check-label" htmlFor="rememberMe" required >Se souvenir de moi</label>
             </div> */}
-            <button type="submit">Se connecter</button>
+            <button type="submit" disabled={loading}>{loading ? 'Connexion...' : 'Se connecter'}</button>
 
             {/* Liens supplémentaires */}
           <div className="auth-links" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '16px' }}>
             <Link to="/forgot-password">Mot de passe oublié ?</Link>
             <span>
-              Vous n'avez pas de compte ? <Link to="/register" style={{ marginLeft: '6px' }}>Créer un compte</Link>
+              Vous n'avez pas de compte ? <Link to="/Register" style={{ marginLeft: '6px' }}>Créer un compte</Link>
             </span>
           </div>
 
